@@ -8,3 +8,9 @@ userTable.insertRows([{ name: 'Nitin' }, { name: 'Jatin' }])
 
 console.log(userTable.findValues({ name: 'Nitin' }))
 console.log(userTable.displayFullTable('user'))
+
+userTable.updateRows({ name: 'Nitin' }, { name: 'Nitin Sahu' })
+console.log(userTable.displayFullTable('user'))
+
+userTable.deleteRows({ id: 2 })
+console.log(userTable.displayFullTable('user'))

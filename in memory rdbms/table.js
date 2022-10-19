@@ -19,9 +19,27 @@ class Table {
 
     insertRows(rows) {
         for (const row of rows) {
-            this.rows.push(new Row(this.incrementId, row))
+            this.rows.push(new Row({ id: this.incrementId, ...row}))
             this.incrementId += 1
         }
+        console.log(`${rows.length} records inserted!`)
+    }
+
+    updateRows(whereClause, newData) {
+        const rowsToUpdate = this.findValues(whereClause)
+        rowsToUpdate.forEach(row => {
+            row.columnData = { ...row.columnData, ...newData }
+        })
+        console.log(`${rowsToUpdate.length} rows updated`)
+    }
+
+    deleteRows(whereClause) {
+        const rowsToDelete = this.findValues(whereClause)
+        console.log('delete rows', rowsToDelete)
+        rowsToDelete.forEach(row => {
+            row.isDeleted = 1
+        })
+        console.log(`${rowsToDelete.length} rows deleted`)
     }
 
     findValues(whereClause) {
@@ -40,8 +58,10 @@ class Table {
     }
 
     displayFullTable() {
-        return this.rows
+        console.log(`-------------- Records of ${this.tableName} ---------------`)
+        return this.rows.filter(row => !row.isDeleted)
     }
+
 }
 
 module.exports = Table

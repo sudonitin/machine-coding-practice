@@ -1,7 +1,7 @@
 class Row{
-    constructor(id, data) {
-        this.id = id
+    constructor(data) {
         this.columnData = data
+        this.isDeleted = 0
     }
 }
 
