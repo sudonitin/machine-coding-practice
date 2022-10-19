@@ -1,0 +1,33 @@
+Implement an in-memory relational data store
+Features:
+Create table
+Delete Table
+Insert row 
+Update row
+Delete row
+Create Index on a single column
+
+Create, Insert, update (no locking), id based indexing (in memory)
+
+
+Create Table
+Create a store for a specific table. We can assume all fields of type string. Table name and column names should be persisted as metadata either on the table itself or on a separate entity.
+
+createTable(<table name>, [Column list])
+
+Insert Row
+Generate unique ID for the to-be-created row. Add the row into the table and return the newly-created-row’s ID.
+
+insertRow(<table name>, [value list in the same order of table creation])
+
+Update Row
+Search for the row to be updated. Perform an in-place update with the columns to be updated with the new values. If a column need not be updated
+
+updateRow(<table name>, [map of column name to updated value])
+
+Delete Row
+
+deleteRow(<table name>, [map of column name to delete value])
+
+Create Index
+ createIndex(<table name>, <column_name>)

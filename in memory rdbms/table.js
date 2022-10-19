@@ -1,8 +1,6 @@
 const Column = require('./column')
+const Row = require('./row')
 
-const validatePrimaryKey = (columns) => {
-    return Object.keys(columns).filter((column) => column[isPrimaryKey] === true).length == 1
-}
 class Table {
     constructor(tableName, columns) {
         this.tableName = tableName
@@ -12,17 +10,16 @@ class Table {
     }
     
     createColumns(columns) {
-        if (!validatePrimaryKey(columns)) throw `A table cannot have multiple or no primary keys`
-        return Object.keys(columns).map(columnName => {
-            const col = new Column(columnName, columns[columnName])
-            if (col.isPrimary) this.primaryKey = col
-            return col
+        const columnsMap = {}
+        Object.keys(columns).forEach(columnName => {
+            columnsMap[columnName] = new Column(columnName, columns[columnName])
         })
+        return columnsMap
     }
 
     insertRows(rows) {
         for (const row of rows) {
-            this.rows.push({ [this.primaryKey.colummName]: this.incrementId, ...row })
+            this.rows.push(new Row(this.incrementId, row))
             this.incrementId += 1
         }
     }
@@ -32,7 +29,7 @@ class Table {
         return this.rows.filter(row => {
             for (const column in whereClause) {
                 if (!this.columns[column]) throw `${column} does not exist in ${this.tableName}`
-                if (row[[column]] !== whereClause[column]) return false
+                if (row.columnData[[column]] !== whereClause[column]) return false
             }
             return true
         })
