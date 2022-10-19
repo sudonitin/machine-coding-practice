@@ -1,13 +1,18 @@
 class Column{
-    allowedColumnTypes = ['String', 'Number']
-    constructor(colummName, columnType) {
-        if (this.isValidColumnType(columnType)) {
-            this.colummName = colummName
-            this.columnType = columnType
-        } else throw `Illegal columnType:: ${columnType}`
+    dataTypesEnum = {
+        String: 'String',
+        Number: 'Number'
     }
-    isValidColumnType(columnType) {
-        return this.allowedColumnTypes.includes(columnType) ? columnType : false
+    constructor(colummName, { dataType, isPrimary = false, isAutoIncrement = false }) {
+        if (this.isValiddataType(dataType)) {
+            this.colummName = colummName
+            this.dataType = dataType
+            this.isPrimary = isPrimary
+            this.isAutoIncrement = isAutoIncrement
+        } else throw `Illegal dataType:: ${dataType}`
+    }
+    isValiddataType(dataType) {
+        return this.dataTypesEnum.includes(dataType) ? dataType : false
     }
 }
 
