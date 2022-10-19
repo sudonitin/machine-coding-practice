@@ -7,6 +7,7 @@ class Table {
         this.columns = this.createColumns(columns)
         this.rows = []
         this.incrementId = 1
+        this.indices = {}
     }
     
     createColumns(columns) {
@@ -44,6 +45,8 @@ class Table {
 
     findValues(whereClause) {
         if (whereClause === {}) return this.rows
+        const resultInIndex = this.findInIndex(whereClause)
+        if (resultInIndex) return resultInIndex
         return this.rows.filter(row => {
             for (const column in whereClause) {
                 if (!this.columns[column]) throw `${column} does not exist in ${this.tableName}`
@@ -51,6 +54,12 @@ class Table {
             }
             return true
         })
+    }
+
+    findInIndex(whereClause) {
+        for (const column in whereClause) {
+            if (this.indices[[column]] && this.indices[[column]][whereClause[column]]) return this.indices[[column]][whereClause[column]]
+        }
     }
 
     truncate() {
@@ -62,6 +71,14 @@ class Table {
         return this.rows.filter(row => !row.isDeleted)
     }
 
+    createIndexOnColumn(column) {
+        this.indices[column] = {}
+        this.rows.forEach(row => {
+            this.indices[column][[row.columnData[[column]]]] = row
+        })
+        console.log(`======== Index Created!  ========`)
+        console.log(this.indices[column])
+    }
 }
 
 module.exports = Table
