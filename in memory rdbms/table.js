@@ -31,6 +31,7 @@ class Table {
         rowsToUpdate.forEach(row => {
             row.columnData = { ...row.columnData, ...newData }
         })
+        // update index as well as in js we are not storing the reference of row
         console.log(`${rowsToUpdate.length} rows updated`)
     }
 
