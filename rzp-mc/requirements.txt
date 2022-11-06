@@ -1,0 +1,8 @@
+implement a system like youtube.
+
+1)Create a user account.
+2)Upload videos.
+3)Search videos by name.
+4)Show total view count of video.
+5)Add/delete comments on videos.
+6)Like/Dislike the video.

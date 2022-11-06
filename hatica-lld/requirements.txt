@@ -1,0 +1,89 @@
+Companies
+    employees
+Owners
+    hirerachy
+Tools
+    hirerachy
+Metrics
+example: no. of meetings
+
+S - Single Responsibility
+O - Open closed
+L - Substitution
+I - min. Interface dependency
+D - Inversion dependency
+
+class Hatica{
+    constructor() {
+        this.companies = []
+        this.tools = []
+    }
+    // addCompany
+    // addTool
+}
+
+class Company{
+    constructor() {
+        this.employees = []
+        this.subscriptions = []
+        this.teams = []
+    }
+    // addEmployee
+    // purchaseSubscription
+    // createTeam
+}
+
+class Team{
+    constructor(owner, teammates) {
+        this.owner = owner
+        this.teammates = teammates
+    }
+    // addTeammate
+    // getMetrics
+}
+
+class Employee{
+    constructor(employeeId) {
+        this.employeeId = employeeId
+    }
+}
+
+class Manager extends Employee{
+    constructor(employeeId) {
+        this.employeeId = employeeId
+        this.isOwner = true
+    }
+}
+
+class Tool{
+    constructor(toolName) {
+        this.toolName = toolName
+        this.metrics = []
+    }
+    // addMetric
+}
+
+class Git extends Tool{
+    constructor(pr) {
+        this.pr = pr
+    }
+
+}
+
+class Github extends Git{
+    constructor() {
+        this.pr = 'pr'
+    }
+}
+
+class Gitlab extends Git{
+    constructor() {
+        this.pr = 'mr'
+    }
+}
+
+class Metric{
+    constructor(metric) {
+        this.metric
+    }
+}
