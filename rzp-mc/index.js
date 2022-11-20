@@ -11,10 +11,10 @@ const pythonVideo = YouTube.uploadVideo(nitin, 'python tutorial')
 const cVideo = YouTube.uploadVideo(nitin, 'c tutorial')
 const cppVideo = YouTube.uploadVideo(nitin, 'cpp tutorial')
 
-// const searchResults = YouTube.searchVideo('tutorial')
+const searchResults = YouTube.searchVideo('tutorial')
 // console.log(searchResults)
 
-// const video = searchResults[0]
+const video = searchResults[0]
 // YouTube.watchVideo(video)
 // YouTube.watchVideo(searchResults[1])
 // YouTube.watchVideo(searchResults[2])
@@ -33,7 +33,7 @@ const cppVideo = YouTube.uploadVideo(nitin, 'cpp tutorial')
 
 jsVideo.likeDislike(nitin, 'like')
 jsVideo.likeDislike(jatin, 'like')
-// jsVideo.likeDislike(nitin, 'dislike')
+jsVideo.likeDislike(nitin, 'dislike')
 console.log(jsVideo.totalLikesDislikes())
 
-// console.log('Total Likes & dislikes', video.totalLikesDislikes())
+console.log('Total Likes & dislikes', video.totalLikesDislikes())
