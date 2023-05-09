@@ -1,6 +1,0 @@
-Features:
-Create multi-lines content of data
-Search and replace.
-Cursor and its actions such as navigate up / down / left / right.
-Page Down / Page Up.
-Home / End
