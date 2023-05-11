@@ -17,18 +17,22 @@ public class File {
         redoStack = new Stack<>();
     }
 
-    public CharNode insert(String content) {
+    public CharNode insert(String content, boolean... optionalFlags) {
+        boolean isUndoOperation = optionalFlags.length > 0 ? optionalFlags[0] :
+                false;
         cursor.right = new CharNode(content, cursor, cursor.right);
         cursor = cursor.right;
         if (cursor.right != null) {
             cursor.right.left = cursor;
         }
         Operation operation = new Operation(OperationType.BACKSPACE, cursor);
-        undoStack.push(operation);
+        if (!isUndoOperation) undoStack.push(operation);
         return cursor;
     }
 
-    public CharNode backspace() {
+    public CharNode backspace(boolean... optionalFlags) {
+        boolean isUndoOperation = optionalFlags.length > 0 ? optionalFlags[0] :
+                false;
         if (cursor.val != null) {
             CharNode removedChar = cursor;
             if (cursor.right != null) {
@@ -41,7 +45,7 @@ public class File {
             removedChar.left = null;
             removedChar.right = null;
             Operation operation = new Operation(OperationType.INSERT, removedChar);
-            undoStack.push(operation);
+            if (!isUndoOperation) undoStack.push(operation);
         }
         return cursor;
     }
@@ -64,13 +68,14 @@ public class File {
                         new Operation(OperationType.BACKSPACE,
                         revertOperation.getContent());
                 redoStack.push(backspaceOperation);
-                return insert(revertOperation.getContent().val);
+                return insert(revertOperation.getContent().val, true);
             case BACKSPACE:
+                cursor = revertOperation.getContent();
                 Operation insertOperation =
                         new Operation(OperationType.INSERT,
                         revertOperation.getContent());
                 redoStack.push(insertOperation);
-                return backspace();
+                return backspace(true);
         }
         return cursor;
     }
@@ -92,5 +97,15 @@ public class File {
                 return backspace();
         }
         return cursor;
+    }
+
+    public String displayContent() {
+        CharNode tmpCursor = startOfFile.right;
+        String content = "";
+        while (tmpCursor != null && tmpCursor.val != null) {
+            content += tmpCursor.val;
+            tmpCursor = tmpCursor.right;
+        }
+        return content;
     }
 }
