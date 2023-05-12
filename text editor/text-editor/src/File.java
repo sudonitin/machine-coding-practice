@@ -25,8 +25,10 @@ public class File {
         if (cursor.right != null) {
             cursor.right.left = cursor;
         }
-        Operation operation = new Operation(OperationType.BACKSPACE, cursor);
-        if (!isUndoOperation) undoStack.push(operation);
+        if (!isUndoOperation) {
+            Operation operation = new Operation(OperationType.BACKSPACE, cursor);
+            undoStack.push(operation);
+        }
         return cursor;
     }
 
@@ -44,18 +46,26 @@ public class File {
             cursor = cursor.left;
             removedChar.left = null;
             removedChar.right = null;
-            Operation operation = new Operation(OperationType.INSERT, removedChar);
-            if (!isUndoOperation) undoStack.push(operation);
+            if (!isUndoOperation) {
+                Operation operation = new Operation(OperationType.INSERT, removedChar);
+                undoStack.push(operation);
+            }
         }
         return cursor;
     }
 
-    public CharNode navigate(String direction) {
+    public CharNode navigate(String direction, boolean ...optionalFlags) {
         // refactor with json object
+        boolean isUndoOperation = optionalFlags.length > 0 ? optionalFlags[0] :
+                false;
         if (direction.equalsIgnoreCase("left") && cursor.left != null) {
             cursor = cursor.left;
+            if (!isUndoOperation)
+            undoStack.push(new Operation(OperationType.RIGHT, null));
         } else if (direction.equalsIgnoreCase("right") && cursor.right != null) {
             cursor = cursor.right;
+            if (!isUndoOperation)
+            undoStack.push(new Operation(OperationType.LEFT, null));
         }
         return cursor;
     }
@@ -70,12 +80,17 @@ public class File {
                 redoStack.push(backspaceOperation);
                 return insert(revertOperation.getContent().val, true);
             case BACKSPACE:
-                cursor = revertOperation.getContent();
                 Operation insertOperation =
                         new Operation(OperationType.INSERT,
                         revertOperation.getContent());
                 redoStack.push(insertOperation);
                 return backspace(true);
+            case LEFT:
+                redoStack.push(new Operation(OperationType.RIGHT, null));
+                return navigate(OperationType.LEFT.getValue(), true);
+            case RIGHT:
+                redoStack.push(new Operation(OperationType.LEFT, null));
+                return navigate(OperationType.RIGHT.getValue(), true);
         }
         return cursor;
     }
@@ -84,17 +99,13 @@ public class File {
         Operation revertOperation = redoStack.pop();
         switch (revertOperation.getOperationType()) {
             case INSERT:
-                Operation backspaceOperation =
-                        new Operation(OperationType.BACKSPACE,
-                                revertOperation.getContent());
-                undoStack.push(backspaceOperation);
                 return insert(revertOperation.getContent().val);
             case BACKSPACE:
-                Operation insertOperation =
-                        new Operation(OperationType.INSERT,
-                                revertOperation.getContent());
-                undoStack.push(insertOperation);
                 return backspace();
+            case LEFT:
+                return navigate(OperationType.LEFT.getValue());
+            case RIGHT:
+                return navigate(OperationType.RIGHT.getValue());
         }
         return cursor;
     }
